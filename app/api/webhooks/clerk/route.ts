@@ -57,12 +57,13 @@ export async function POST(req: Request) {
                 externalUserId: payload.data.id,
                 username: payload.data.username,
                 imageUrl: payload.data.image_url,
-                // Other fields like createdAt, updatedAt can also be included here
-            }
+				stream: {
+					create: {
+						name: `${payload.data.username}'s stream`,
+					},
+				},
+            },
         });
-    } else {
-        // Handle the case where username is undefined
-        // You can either skip the creation operation or provide a default value
     }
 }
 if (eventType === "user.updated") {
@@ -76,26 +77,7 @@ if (eventType === "user.updated") {
                 imageUrl: payload.data.image_url,
             },
         });
-    } else {
-        // Handle the case where username is undefined
-        // You can either skip the update operation or provide a default value
-    }
 }
-if (eventType === "user.updated") {
-    if (payload.data.username) {
-        await db.user.update({
-            where: {
-                externalUserId: payload.data.id,
-            },
-            data: {
-                username: payload.data.username,
-                imageUrl: payload.data.image_url,
-            },
-        });
-    } else {
-        // Handle the case where username is undefined
-        // You can either skip the update operation or provide a default value
-    }
 }
 
 if (eventType === "user.deleted") {
@@ -111,10 +93,7 @@ if (eventType === "user.deleted") {
                 externalUserId: payload.data.id,
             },
         });
-    } else {
-        // Handle the case where the user does not exist
-        // You can either skip the deletion operation or log an error message
-    }
+    } 
 }
-  return new Response('', { status: 200 })
+return new Response('', { status: 200 })
 };
